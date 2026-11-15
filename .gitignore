@@ -1,0 +1,26 @@
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+
+# Eval raw runs (the printed report is kept in docs/eval-results.md)
+eval/results/
+
+# Logs and editor/OS files
+logs/
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
