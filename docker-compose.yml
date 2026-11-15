@@ -1,0 +1,36 @@
+# Dev Postgres + the app image (profile "app"). Credentials are deliberately boring;
+# a real deployment gets its own from environment variables.
+services:
+  db:
+    image: postgres:17
+    container_name: support-bot-db
+    environment:
+      POSTGRES_USER: support
+      POSTGRES_PASSWORD: support
+      POSTGRES_DB: support_bot
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U support -d support_bot"]
+      interval: 5s
+      retries: 10
+  app:
+    build: .
+    profiles: ["app"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://support:support@db:5432/support_bot
+      # Inside the container, "localhost" is the container itself, so Ollama on your PC
+      # is reached through host.docker.internal. Remove this line when using real Claude.
+      ANTHROPIC_BASE_URL: http://host.docker.internal:11434
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
