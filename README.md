@@ -307,7 +307,7 @@ order-support-bot/
 ├── apps/telegram_bot.py Telegram front-end (talks only to the API)
 ├── tests/               24 pytest tests
 ├── eval/run_eval.py     eval and red-team harness
-├── docs/                eval report, demo media
+├── docs/                eval report, architecture write-up, demo media
 ├── Dockerfile, docker-compose.yml, .github/workflows/ci.yml
 └── pyproject.toml
 ```
@@ -334,6 +334,7 @@ core free of any web, Telegram or MCP dependency.
   `session_id` is the trust boundary on the MCP side.
 - **Same code, two backends.** The SDK reads `ANTHROPIC_BASE_URL`, so a local model and Claude
   differ only in configuration.
+- The full write-up, with a request walkthrough, threat model and the alternatives I rejected, is in [docs/architecture.md](docs/architecture.md).
 
 ## Known limitations
 
