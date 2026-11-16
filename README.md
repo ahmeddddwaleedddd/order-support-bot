@@ -11,7 +11,7 @@ escalate), and save a case**. It works through tool calls against real data and 
 The point of the project is **reliability**: every rule that matters (who the customer is,
 what the policy allows, whether the customer confirmed, whether money moves twice) is
 enforced by code, not by the prompt. A weak or manipulated model can fail to be helpful, but
-it cannot refund the wrong order.
+it cannot act on an order the customer has not verified, and it cannot move money twice.
 
 <!-- Uncomment once docs/demo.gif exists (record it, then remove these two marker lines):
 ![Demo: refund with confirmation](docs/demo.gif)
@@ -97,7 +97,7 @@ flowchart TD
 | `check_policy` | read | deterministic result: `allowed`, `denied` or `needs_human`, with a reason |
 | `cancel_order` | write | only after policy allowed it and the customer confirmed in a later message |
 | `issue_refund` | write | same gate; idempotent |
-| `escalate_to_human` | write | creates a handoff with the reason |
+| `escalate_to_human` | write | records an escalation with the reason (no staff notification yet) |
 
 The case is saved when the conversation closes (`/done` in the CLI and Telegram, or
 `POST /sessions/{id}/close`).
@@ -354,6 +354,10 @@ core free of any web, Telegram or MCP dependency.
 - The MCP server trusts any connected host to supply `session_id`; only connect hosts you
   trust.
 - The Telegram demo depends on the author's machine running the model.
+- The code enforces that the customer sent a new message after the policy check, not that the
+  message is an explicit "yes"; asking for a clear confirmation is left to the prompt. A
+  confirm button or an explicit confirm flag in the API would enforce it fully.
+- Escalations are stored in the database only. There is no staff notification or dashboard yet.
 
 ## Roadmap
 
@@ -365,6 +369,7 @@ core free of any web, Telegram or MCP dependency.
 - Arabic conversations, WhatsApp channel, change address, partial refunds, reship.
 - A human-handoff dashboard, sentiment-based escalation, and a real store integration
   (Shopify or WooCommerce) behind `db.py`.
+- Notify staff on escalation (Telegram or email) and add a confirm button.
 
 ## License
 
