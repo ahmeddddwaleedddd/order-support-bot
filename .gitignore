@@ -24,3 +24,10 @@ logs/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local media (raw recordings, CapCut project, exported video). Only docs/demo.gif and
+# docs/telegram-demo.png are published; the video lives on YouTube.
+/media/
+*.mp4
+*.mkv
+*.mov
