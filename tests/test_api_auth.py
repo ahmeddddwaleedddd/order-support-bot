@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
-from support_bot.api.main import app
 
 from support_bot import config
+from support_bot.api.main import app
 
 client = TestClient(app)  # no `with`: lifespan (DB) not started; auth runs first
 
